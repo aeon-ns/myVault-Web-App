@@ -9,7 +9,23 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var MONGO_DB_URI = 'mongodb://heroku_06jsp69m:6am4itgjv5h85cga47m4dot2vd@ds129018.mlab.com:29018/heroku_06jsp69m';
+
 var app = express();
+
+mongoose.connect(MONGO_DB_URI);
+
+var Cat = mongoose.model('Cat', { name: String });
+
+var kitty = new Cat({ name: 'Zildjian' });
+kitty.save(function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('meow');
+  }
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
