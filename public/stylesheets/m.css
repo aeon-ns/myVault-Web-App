@@ -1,0 +1,9 @@
+.imgLeft {
+    max-width: 60%;
+    height: auto;
+    width: auto\9; /* ie8 */
+}
+
+.bkgrndColor {
+  background-color: #423D3A;
+}
