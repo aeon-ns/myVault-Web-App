@@ -4,31 +4,30 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+var authenticate = require('./authenticate.js');
 var mongoose = require('mongoose');
+var config = require('./config');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-
-var MONGO_DB_URI = 'mongodb://heroku_06jsp69m:6am4itgjv5h85cga47m4dot2vd@ds129018.mlab.com:29018/heroku_06jsp69m';
+var noteRouter = require('./routes/noteRouter');
+var pwordRouter = require('./routes/pwordRouter');
+var cardRouter = require('./routes/cardRouter');
+var gridCardRouter = require('./routes/gridRouter');
 
 var app = express();
 
-mongoose.connect(MONGO_DB_URI);
-
-var Cat = mongoose.model('Cat', { name: String });
-
-var kitty = new Cat({ name: 'Zildjian' });
-kitty.save(function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('meow');
-  }
+mongoose.connect(config.MONGO_DB_URI);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  // we're connected!
+  console.log("Connected correctly to MongoDb server");
 });
 
-
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'public/views'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -36,10 +35,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(passport.initialize());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/notes', noteRouter);
+app.use('/pwds', pwordRouter);
+app.use('/cards', cardRouter);
+app.use('/grids', gridCardRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
