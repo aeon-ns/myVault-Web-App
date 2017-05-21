@@ -4,8 +4,7 @@ angular.module('myVault')
 
     .constant('MODE_EDIT', 1)
     .constant('MODE_OPEN', 0)
-    .constant('BASE_URL', '')
-    .service('loginService', ['$resource'])
+    .constant('BASE_URL', ' ')
 
     .factory('actionFac', ['noteModalFac', 'pwordModalFac', 'cardModalFac', function (noteModalFac, pwordModalFac, cardModalFac) {
         var fac = {};
