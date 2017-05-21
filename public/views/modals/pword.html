@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Password</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Title" ng-model="$ctrl.pword.title">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Username" ng-model="$ctrl.pword.username">
+    </div>
+    <div class="form-group">
+        <input class="form-control" type="password" placeholder="Password" ng-model="$ctrl.pword.password">
+    </div>
+    <ul ng-if="$ctrl.pword.hasCustom" class="list-unstyled">
+        <li ng-repeat="field in $ctrl.pword.customFields">
+            <hr />
+            <div class="form-group">
+                <button class="btn btn-link pull-right" ng-click="$ctrl.delField($index)"><span class="glyphicon glyphicon-trash" ></span></button>
+                <input class="form-control" type="text" placeholder="Field Name" ng-model="field.key">
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="{{field.type}}" placeholder="Field Value" ng-model="field.value">
+            </div>
+            <div class="form-group">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class='btn btn-primary' ng-class="{'active' : field.type=='password'}"><input type="radio" value="password" ng-model="field.type">Question</label>
+                    <label class="btn btn-primary" ng-class="{'active': field.type=='text'}"><input type="radio" value="text" ng-model="field.type">Note</label>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-info pull-left" ng-click="$ctrl.addField()">Add Field</button>
+    <button class="btn btn-primary" ng-click="$ctrl.save()">Save</button>
+    <button class="btn btn-default" ng-click="$ctrl.close()">Cancel</button>
+</div>

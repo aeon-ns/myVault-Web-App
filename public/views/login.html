@@ -1,0 +1,39 @@
+<div class="container" ng-controller="LoginController">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8">
+            <img class="img-responsive homeImg" src="../images/home_locker.jpg" alt="Login Screen">
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <!--LoginForm Here!-->
+            <div class="pad33">
+
+            </div>
+            <h2 class="al-center t-cblue">
+                myVault
+            </h2>
+            <form class="form">
+                <div class="form-group">
+                    <input class="form-control" type="email" placeholder="Email" aria-placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="password" placeholder="Password" aria-placeholder="Password">
+                </div>
+                <div class="form-group" ng-if="!login">
+                    <input class="form-control" type="password" placeholder="Confirm Password" aria-placeholder="Confirm Password">
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-9">
+                        <p class="t-white" ng-if="login">New User?</p>
+                        <p class="t-white" ng-if="!login">Already Registered?</p>
+                        <a ng-if="login" ng-click="setLoginFalse()">Register</a>
+                        <a ng-if="!login" ng-click="setLoginTrue()">Sign In</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn btn-primary " type="button" ng-if="login" ui-sref="welcome">Sign In</button>
+                        <button class="btn btn-primary" type="button" ng-if="!login">Sign Up</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

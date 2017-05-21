@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1>Pinned</h1>
+        </div>
+        <div class="btn-group col-sm-3 col-sm-offset-1" style="padding:2%" role="group">
+            <button type="button" class="btn btn-warning">+Note</button>
+            <button type="button" class="btn btn-warning">+Password</button>
+            <button type="button" class="btn btn-warning">+Card</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Notes</h2>
+            <p ng-if="notes.length==0">No pinned notes to show.</p>
+            <ul ng-if="notes.length!=0" class="list-unstyled" ng-repeat="note in notes">
+                <li class="nlist">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-8" ng-click="editNote(note)">
+                            <h4 style="padding-left:7px"><span class="glyphicon glyphicon-file"></span> {{note.title}}</h4>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <h4>
+                                <a class="col-sm-4" ng-click="editNote(note)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-sm-4" ng-click="pinIt(note, 0)"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                <a class="col-sm-4" ng-click="delIt($index, 0)"><span class="glyphicon glyphicon-trash"></span> </a>
+                            </h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Passwords</h2>
+            <p ng-if="pwords.length==0">No pinned passwords to show.</p>
+            <ul ng-if="pwords.length!=0" class="list-unstyled" ng-repeat="pword in pwords">
+                <li class="nlist">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-8" ng-click="editPword(pword)">
+                            <h4 style="padding-left:7px"><span class="glyphicon glyphicon-lock"></span> {{pword.title}}</h4>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <h4>
+                                <a class="col-sm-4" ng-click="editPword(pword)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-sm-4" ng-click="pinIt(pword, 1)"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                <a class="col-sm-4" ng-click="delIt($index, 1)"><span class="glyphicon glyphicon-trash"></span> </a>
+                            </h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Cards</h2>
+            <p ng-if="cards.length==0">No pinned cards to show.</p>
+            <ul ng-if="cards.length!=0" class="list-unstyled" ng-repeat="card in cards">
+                <li class="nlist">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-8" ng-click="openCard(card)">
+                            <h4 style="padding-left:7px"><span class="glyphicon glyphicon-credit-card"></span> {{card.title}}</h4>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <h4>
+                                <a class="col-sm-4" ng-click="editCard(card)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-sm-4" ng-click="pinIt(card, 2)"><span class="glyphicon glyphicon-map-marker"></span></a>
+                                <a class="col-sm-4" ng-click="delIt($index, 2)"><span class="glyphicon glyphicon-trash"></span> </a>
+                            </h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

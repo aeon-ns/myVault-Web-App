@@ -1,9 +1,88 @@
-.imgLeft {
-    max-width: 60%;
-    height: auto;
-    width: auto\9; /* ie8 */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.homeImg {
+    height: 70%;
+    width: auto;
+    max-height: 600px;
+    align-content: left;
+    min-width: 50%;
 }
-
-.bkgrndColor {
+.t-white {
+  color: white;
+}
+.t-cblue {
+  color: #0099F2;
+}
+.bg-color {
   background-color: #423D3A;
+}
+.bg-crimson {
+  background-color: crimson;
+}
+.v-center {
+  top: 50%;
+}
+.al-center {
+  align-content: center;
+  text-align: center;
+}
+.al-left {
+  text-align: left;
+}
+.al-right {
+  text-align: right;
+}
+.pad33 {
+  padding: 27%;
+}
+.padRight {
+  padding-right: 10px;
+}
+.left { 
+border-right: 1px solid #222222;
+position: absolute; height: auto; width: 10%; left: 0; right: 10%; top: 0; bottom: 0;
+}
+.right {
+position: absolute; height: auto; width: 90%; left: 10%; right: 90%; top: 0; bottom: 0;
+}
+.top { 
+position: absolute; height: 40px; width: auto; left: 0; right: 0; top: 0; bottom: auto;
+}
+.main {
+position: absolute; height: auto; width: auto; left: 0; right: 0; top: 40px; bottom: 0;
+}
+.pinned {
+position: relative;
+width: 100%;
+height: auto;
+left: 0; right: 100%; top: 10%; bottom: 0;
+text-align: center;
+} 
+.notes {
+position: relative;
+width: 100%;
+height: auto;
+text-align: center;
+left: 0; right: 100%; top: 20%; bottom: 0;
+}
+.passwords {
+position: relative;
+width: 100%;
+text-align: center;
+height: auto;
+left: 0; right: 100%; top: 30%; bottom: 0;
+}
+.cards {
+position: relative;
+width: 100%;
+height: auto;
+text-align: center;
+left: 0; right: 100%; top: 40%; bottom: 0;
+}
+.activeSide {
+  background-color: #0099F2;
+}
+.nlist {
+  font-size: 2%;
+  border: 1px solid #0099F2;
+  border-radius: 5pt;
 }

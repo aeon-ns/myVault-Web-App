@@ -1,0 +1,65 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Card <button class="btn btn-link pull-right" ng-click="$ctrl.close()"><span class="glyphicon glyphicon-remove"></span></button></h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="form-group">
+        <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Title" ng-model="$ctrl.card.title">
+        <label ng-if="!$ctrl.mode">{{$ctrl.card.title}}:  <span class="label label-info">{{$ctrl.card.cardNo}}</span></label>
+        <button ng-if="!$ctrl.mode" ng-click="$ctrl.switchMode()" class="btn btn-primary btn-sm pull-right">Edit</button>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3">
+            <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Card Number" ng-model="$ctrl.card.cardNo[0]" maxlength="4">
+        </div>
+        <div class="col-sm-3">
+            <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Card Number" ng-model="$ctrl.card.cardNo[1]" maxlength="4">
+        </div>
+        <div class="col-sm-3">
+            <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Card Number" ng-model="$ctrl.card.cardNo[2]" maxlength="4">
+        </div>
+        <div class="col-sm-3">
+            <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Card Number" ng-model="$ctrl.card.cardNo[3]" maxlength="4">
+        </div>
+    </div>
+    <div class="form-group">
+        <label >Expiration: </label>
+        <h4 ng-if="!$ctrl.mode"><span class="label label-info">{{$ctrl.card.expMonth}} / {{$ctrl.card.expYear}}</span></h4>
+    </div>
+    <div ng-if="$ctrl.mode" class="form-group row">
+        <label class="col-sm-3" style="padding-top: 5px; padding-right:5px" for="expMonth">Month:</label>
+        <div class="col-sm-3">
+            <input id="expMonth" name="expMonth" class="form-control" type="number" max="12" min="1" ng-model="$ctrl.card.expMonth">
+        </div>
+        <label class="col-sm-3" style="padding-top: 5px; padding-right:5px" for="expYear">Year:</label>
+        <div class="col-sm-3">
+            <input id="expYear" name="expYear" class="form-control" type="number" min="17" ng-model="$ctrl.card.expYear">
+        </div>
+    </div>
+    <ul ng-if="$ctrl.card.hasCustom" class="list-unstyled">
+        <li ng-repeat="field in $ctrl.card.customFields">
+            <hr ng-if="$first"/>
+            <div class="form-group">
+                <button ng-if="$ctrl.mode" class="btn btn-link pull-right" ng-click="$ctrl.delField($index)"><span class="glyphicon glyphicon-trash" ></span></button>
+                <input ng-if="$ctrl.mode" class="form-control" type="text" placeholder="Field Name" ng-model="field.key">
+                <label ng-if="!$ctrl.mode">{{field.key}}</label>
+            </div>
+            <div class="form-group">
+                <input ng-if="$ctrl.mode" class="form-control" type="{{field.type}}" placeholder="Field Value" ng-model="field.value">
+                <h4 ng-if="!$ctrl.mode"><label class="label label-info">{{field.value}}</label></h4>
+            </div>
+            <div class="form-group" ng-if="$ctrl.mode">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class='btn btn-primary' ng-class="{'active' : field.type=='password'}"><input type="radio" value="password" ng-model="field.type">Question</label>
+                    <label class="btn btn-primary" ng-class="{'active': field.type=='text'}"><input type="radio" value="text" ng-model="field.type">Note</label>
+                </div>
+            </div>
+            <hr ng-if="$first||$middle"/>
+        </li>
+    </ul>
+</div>
+
+<div class="modal-footer" ng-if="$ctrl.mode">
+    <button class="btn btn-primary pull-left" ng-click="$ctrl.addField()">Add Field</button>
+    <button class="btn btn-success" ng-click="$ctrl.save()">Save</button>
+    <button class="btn btn-danger" ng-click="$ctrl.close()">Discard</button>
+</div>
