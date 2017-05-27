@@ -18,12 +18,16 @@ var customSchema = new Schema({
 
 var Card = new Schema({
     title: String,
-    cardNo: [String],
+    cardNo: [],
     expMonth: Number,
     expYear: Number,
     pinned: {
         type: Boolean,
         default: false
+    },
+    account: {
+        type: Boolean,
+        default: true
     },
     hasCustom: {
         type: Boolean,

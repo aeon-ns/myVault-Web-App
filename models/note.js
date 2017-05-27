@@ -10,7 +10,7 @@ var Notes = new Schema({
     },
     account: {
         type: Boolean,
-        default: false
+        default: true
     },
     forUser: {
         type: Schema.Types.ObjectId,

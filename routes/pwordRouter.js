@@ -35,9 +35,22 @@ PwordRouter.route('/')
 PwordRouter.route('/:id')
 
     .put(Verify.verifyOrdinaryUser, function (req, res, next) {
-        Pwords.findOne({ forUser: req.decoded._id, _id: req.params.id }, function (err, pword) {
+        Pwords.findById(req.params.id, function (err, pword) {
             if (err) return next(err);
-            pword = req.body;
+            if (pword.forUser!= req.decoded._id) {
+                err.message = "Unauthorized Access!";
+                err.status = 401;
+                return next(err);
+            }
+            if(req.body.title){
+                pword.title = req.body.title;
+                pword.username = req.body.username;
+                pword.password = req.body.password;
+                pword.account = req.body.account;
+                pword.hasCustom = req.body.hasCustom;
+                pword.customFields = req.body.customFields;
+            }
+            pword.pinned = req.body.pinned;
             pword.save(function (err, new_pword) {
                 if (err) return next(err);
                 res.json(new_pword);
@@ -46,7 +59,7 @@ PwordRouter.route('/:id')
     })
 
     .delete(Verify.verifyOrdinaryUser, function (req, res, next) {
-        Pwords.findOneAndRemove({ forUser: req.decoded._id, _id: req.params.id }, function (err, status) {
+        Pwords.findByIdAndRemove(req.params.id, function (err, status) {
             if (err) return next(err);
             res.json(status);
         });

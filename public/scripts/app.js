@@ -51,78 +51,18 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }
                 },
                 resolve: {
-                    notes: function () {
-                        return [{
-                            _id: 0,
-                            title: 'NOTETITLE',
-                            note: 'Sample Note!!!!',
-                            pinned: false
-                        }];
-                    },
-                    pwords: function () {
-                        return [{
-                            _id: 0,
-                            title: 'Password1',
-                            username: 'ns',
-                            password: 'sds',
-                            pinned: false,
-                            hasCustom: false,
-                            customFields: [],
-                            forUser: ''
-                        },
-                        {
-                            _id: 1,
-                            title: 'Password2',
-                            username: 'ns',
-                            password: 'sds',
-                            pinned: false,
-                            hasCustom: true,
-                            customFields: [{
-                                key: 'Note',
-                                value: 'Notessssss',
-                                type: 'text'
-                            }, {
-                                key: 'Pass',
-                                value: 'abjbjj',
-                                type: 'password'
-                            }],
-                            forUser: ''
-                        }];
-                    },
-                    cards: function () {
-                        return [{
-                            _id: 0,
-                            title: 'Card1',
-                            cardNo: [
-                                '1234',
-                                '5678',
-                                '8765',
-                                '4321'
-                            ],
-                            expMonth: 9,
-                            expYear: 17,
-                            pinned: true,
-                            hasCustom: false,
-                            customFields: []
-                        }, {
-                            _id: 1,
-                            title: 'Card2',
-                            cardNo: ['4321','8765','5678','1234',],
-                            expMonth: 10,
-                            expYear: 20,
-                            pinned: false,
-                            hasCustom: true,
-                            customFields: [{
-                                key: 'Note',
-                                value: 'Notessssss',
-                                type: 'text'
-                            }, {
-                                key: 'Pass',
-                                value: 'abjbjj',
-                                type: 'password'
-                            }]
-                        }];
-                    }
+                    notes:['resources', function(resources){
+                        return resources.getNoteResource().query();
+                    }],
+                    pwords: ['resources', function(resources) {
+                        return resources.getPwordResource().query();
+                    }],
+                    cards: ['resources', function (resources) {
+                        return resources.getCardResource().query();
+                    }],
+                    account: ['accService', function(accService){
+                        return accService.getCurrent();
+                    }]
                 }
             })
 
@@ -140,8 +80,16 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     },
                     'content@appCommon': {
                         templateUrl: '../views/notes.html',
-                        controller: 'NoteController'
+                        controller: 'NotesController'
                     }
+                },
+                resolve: {
+                    notes: ['resources', function (resources) {
+                        return resources.getNoteResource().query();
+                    }],
+                    account: ['accService', function (accService) {
+                        return accService.getCurrent();
+                    }]
                 }
             })
 
@@ -159,14 +107,28 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     },
                     'content@appCommon': {
                         templateUrl: '../views/passwords.html',
-                        controller: 'PasswordController'
+                        controller: 'PwordsController'
                     }
+                },
+                resolve: {
+                    pwords: ['resources', function (resources) {
+                        return resources.getPwordResource().query();
+                    }],
+                    account: ['accService', function (accService) {
+                        return accService.getCurrent();
+                    }]
                 }
             })
 
             .state('cards', {
                 url: '/cards',
                 parent: 'appCommon',
+                params: {
+                    acc: {
+                        value: true,
+                        squash: false
+                    }
+                },
                 views: {
                     'sidebar@appCommon': {
                         templateUrl: '../views/sidebar.html',
@@ -178,8 +140,16 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     },
                     'content@appCommon': {
                         templateUrl: '../views/cards.html',
-                        controller: 'CardController'
+                        controller: 'CardsController'
                     }
+                },
+                resolve: {
+                    cards: ['resources', function (resources) {
+                        return resources.getCardResource().query();
+                    }],
+                    account: ['accService', function (accService) {
+                        return accService.getCurrent();
+                    }]
                 }
             })
 

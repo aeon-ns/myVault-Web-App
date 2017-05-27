@@ -24,6 +24,10 @@ var Pwords = new Schema({
         type: Boolean,
         default: false
     },
+    account: {
+        type: Boolean,
+        default: true
+    },
     hasCustom: {
         type: Boolean,
         default: false

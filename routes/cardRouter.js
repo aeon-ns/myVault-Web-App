@@ -35,9 +35,23 @@ CardRouter.route('/')
 CardRouter.route('/:id')
 
     .put(Verify.verifyOrdinaryUser, function (req, res, next) {
-        Cards.findOne({ forUser: req.decoded._id, _id: req.params.id }, function (err, card) {
+        Cards.findById(req.params.id, function (err, card) {
             if (err) return next(err);
-            card = req.body;
+            if (card.forUser != req.decoded._id) {
+                err.message = "Unauthorized Access!";
+                err.status = 401;
+                return next(err);
+            }
+            if (req.body.title) {
+                card.title = req.body.title,
+                card.cardNo = req.body.cardNo,
+                card.expMonth = req.body.expMonth,
+                card.expYear = req.body.expYear,
+                card.account = req.body.account,
+                card.hasCustom = req.body.hasCustom,
+                card.customFields = req.body.customFields;
+            }
+            card.pinned = req.body.pinned;
             card.save(function (err, new_card) {
                 if (err) return next(err);
                 res.json(new_card);
@@ -46,7 +60,7 @@ CardRouter.route('/:id')
     })
 
     .delete(Verify.verifyOrdinaryUser, function (req, res, next) {
-        Cards.findOneAndRemove({ forUser: req.decoded._id, _id: req.params.id }, function (err, status) {
+        Cards.findByIdAndRemove(req.params.id, function (err, status) {
             if (err) return next(err);
             res.json(status);
         });

@@ -8,16 +8,13 @@ var passport = require('passport');
 var authenticate = require('./authenticate.js');
 var mongoose = require('mongoose');
 var config = require('./config');
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var noteRouter = require('./routes/noteRouter');
 var pwordRouter = require('./routes/pwordRouter');
 var cardRouter = require('./routes/cardRouter');
 var gridCardRouter = require('./routes/gridRouter');
-
 var app = express();
-
 mongoose.connect(config.MONGO_DB_URI);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -25,29 +22,22 @@ db.once('open', function () {
   // we're connected!
   console.log("Connected correctly to MongoDb server");
 });
-
 // view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 app.use(passport.initialize());
-
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', index);
 app.use('/users', users);
 app.use('/notes', noteRouter);
-app.use('/pwds', pwordRouter);
+app.use('/pwords', pwordRouter);
 app.use('/cards', cardRouter);
 app.use('/grids', gridCardRouter);
-
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -60,10 +50,15 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  console.log(err.message);
+  console.log(err);
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  //res.render('error');
+  res.json({
+    msg: err.message,
+    error: err
+  })
 });
 
 module.exports = app;

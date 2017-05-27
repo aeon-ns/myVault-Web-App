@@ -1,4 +1,5 @@
 var express = require('express');
+var passport = require('passport');
 var router = express.Router();
 var User = require('../models/user');
 var Verify = require('./verify');
@@ -15,6 +16,8 @@ router.post('/register', function(req, res, next) {
     username: req.body.username
   }), req.body.password, function(err, user){
     if (err) {
+      console.log(err.message);
+      console.log(err);
       return res.status(500).json({ err: err });
     }
     if (req.body.firstname) {
@@ -24,7 +27,7 @@ router.post('/register', function(req, res, next) {
       user.lastname = req.body.lastname;
     }
     user.save(function (err, user) {
-      if (err) throw err;
+      if (err) return next(err);
       passport.authenticate('local')(req, res, function () {
         return res.status(200).json({ status: 'Registration Successful!' });
       });
@@ -58,8 +61,6 @@ router.post('/signin', function(req, res, next) {
 router.get('/signout', function(req, res, next) {
   //Sign Out User
   req.logOut();
-  //Redirect client to home screen
-  res.redirect('/');
 });
 
 router.get('/google', function(req, res, next) {
