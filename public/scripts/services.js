@@ -451,7 +451,7 @@ angular.module('myVault')
                 );
         };
     }])
-    .service('logoutService', ['resources', '$state', function (resources, $state) {
+    .service('logoutService', ['resources', '$state', '$timeout', function (resources, $state, $timeout) {
         var resource = resources.getLogoutResource();
         this.signOut = function () {
             resource.get().$promise.then(
