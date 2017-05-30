@@ -3,9 +3,11 @@
         <div class="col-sm-8">
             <h1>Pinned</h1>
         </div>
-        <div class="btn-group col-sm-3 col-sm-offset-1" style="padding:2%" role="group" data-toggle="buttons">
-            <label class="btn btn-warning" ng-class="{active: account}" ng-click="setActiveAcc(true)"><input type="radio">Personal</label>
-            <label class="btn btn-warning" ng-class="{active: !account}" ng-click="setActiveAcc(false)"><input type="radio">Work</label>
+        <div class="col-sm-3 col-sm-offset-1" style="padding:2%">
+            <div class="btn-group pull-right" role="group" data-toggle="buttons">
+                <label class="btn btn-danger" ng-class="{active: account}" ng-click="setActiveAcc(true)"><input type="radio">Personal</label>
+                <label class="btn btn-danger" ng-class="{active: !account}" ng-click="setActiveAcc(false)"><input type="radio">Work</label>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -15,7 +17,7 @@
             <ul ng-if="nresults.length" class="list-unstyled" ng-repeat="note in notes | filter: {pinned: true, account: account} as nresults">
                 <li class="nlist">
                     <div class="row">
-                        <div class="col-xs-6 col-md-8" ng-click="openNote(note)">
+                        <div class="col-xs-6 col-md-8" ng-click="editNote(note)">
                             <h4 style="padding-left:7px"><span class="glyphicon glyphicon-file"></span> {{note.title}}</h4>
                         </div>
                         <div class="col-xs-6 col-md-4">
@@ -37,7 +39,7 @@
             <ul ng-if="presults.length" class="list-unstyled" ng-repeat="pword in pwords | filter: {pinned: true, account: account} as presults">
                 <li class="nlist">
                     <div class="row">
-                        <div class="col-xs-6 col-md-8" ng-click="openPword(pword)">
+                        <div class="col-xs-6 col-md-8" ng-click="editPword(pword)">
                             <h4 style="padding-left:7px"><span class="glyphicon glyphicon-lock"></span> {{pword.title}}</h4>
                         </div>
                         <div class="col-xs-6 col-md-4">
@@ -59,7 +61,7 @@
             <ul ng-if="cresults.length" class="list-unstyled" ng-repeat="card in cards | filter: {pinned: true, account: account} as cresults">
                 <li class="nlist">
                     <div class="row">
-                        <div class="col-xs-6 col-md-8" ng-click="openCard(card)">
+                        <div class="col-xs-6 col-md-8" ng-click="editCard(card)">
                             <h4 style="padding-left:7px"><span class="glyphicon glyphicon-credit-card"></span> {{card.title}}</h4>
                         </div>
                         <div class="col-xs-6 col-md-4">

@@ -41,6 +41,7 @@ NoteRouter.route('/:id')
             if (req.body.title){
                 note.title = req.body.title;
                 note.note = req.body.note;
+                note.account = req.body.account;
             }
             note.pinned = req.body.pinned;
             note.save(function (err, new_note) {

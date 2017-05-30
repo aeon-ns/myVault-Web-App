@@ -16,10 +16,45 @@
   color: #FC9F00;
 }
 .bg-color {
-  background-color: #423D3A;
+  background-color:#222222;
+}
+.b-rad-top {
+  border: 5px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-color: darkgrey;
+}
+.b-rad-bottom {
+  border: 5px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-color: #2F343A;
+}
+.bg-silver {
+  background-color: #DDDDDD;
 }
 .bg-crimson {
-  background-color: crimson;
+  background-color: #2F343A;
+}
+.input-group-addon.primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(50, 118, 177);
+    border-color: rgb(40, 94, 142);
+}
+.input-group-addon.success {
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 184, 92);
+    border-color: rgb(76, 174, 76);
+}
+.input-group-addon.info {
+    color: rgb(255, 255, 255);
+    background-color: rgb(57, 179, 215);
+    border-color: rgb(38, 154, 188);
+}
+.input-group-addon.ns {
+    color: rgb(255, 255, 255);
+    background-color:#2F343A;
+    border-color: #2F343D;
 }
 .v-center {
   top: 50%;
@@ -37,9 +72,6 @@
 .pad33 {
   padding: 27%;
 }
-.padRight {
-  padding-right: 10px;
-}
 .left { 
 border-right: 1px solid #222222;
 position: absolute; height: auto; width: 10%; left: 0; right: 10%; top: 0; bottom: 0;
@@ -51,38 +83,67 @@ position: absolute; height: auto; width: 90%; left: 10%; right: 90%; top: 0; bot
 position: absolute; height: 40px; width: auto; left: 0; right: 0; top: 0; bottom: auto;
 }
 .main {
-position: absolute; height: auto; width: auto; left: 0; right: 0; top: 40px; bottom: 0;
+position: absolute; height: auto; width: auto; left: 40px; right: 0; top: 60px; bottom: 0;
 }
 .pinned {
 position: relative;
 width: 100%;
 height: auto;
-left: 0; right: 100%; top: 10%; bottom: 0;
+left: 0; right: 100%; top: 12%; bottom: 0;
 text-align: center;
+padding: 20%;
+padding-left: 25%;
+border: 1px solid;
+border-left: none;
+border-color: whitesmoke;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
 } 
 .notes {
 position: relative;
 width: 100%;
 height: auto;
 text-align: center;
-left: 0; right: 100%; top: 20%; bottom: 0;
+padding: 20%;
+padding-left: 25%;
+border: 1px solid;
+border-left: none;
+border-color: whitesmoke;
+left: 0; right: 100%; top: 18%; bottom: 0;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
 }
 .passwords {
 position: relative;
 width: 100%;
+padding: 20%;
+padding-left: 25%;
 text-align: center;
 height: auto;
-left: 0; right: 100%; top: 30%; bottom: 0;
+left: 0; right: 100%; top: 24%; bottom: 0;
+border: 1px solid;
+border-left: none;
+border-color: whitesmoke;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
 }
 .cards {
 position: relative;
 width: 100%;
+padding: 20%;
+padding-left: 25%;
 height: auto;
 text-align: center;
-left: 0; right: 100%; top: 40%; bottom: 0;
+left: 0; right: 100%; top: 30%; bottom: 0;
+border: 1px solid;
+border-left: none;
+border-color: whitesmoke;
+border-top-right-radius: 10px;
+border-bottom-right-radius: 10px;
 }
 .activeSide {
   background-color: #0099F2;
+  border-color: #0099F2;
 }
 .nlist {
   font-size: 2%;

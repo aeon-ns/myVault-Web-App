@@ -1,29 +1,24 @@
 'use strict';
 angular.module('myVault')
-    .constant('MODE_OPEN', 0)
-    .constant('MODE_EDIT', 1)
-    .constant('MODE_NEW', 2)
-    .constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
-    //.constant('BASE_URL', 'http://localhost:3000/')
-    .factory('actionFac', ['noteModalFac', 'pwordModalFac', 'cardModalFac', 'ops', 'parseService', 'resources', function (noteModalFac, pwordModalFac, cardModalFac, ops, parseService, resources) {
+    .constant('MODE_EDIT', 0)
+    .constant('MODE_NEW', 1)
+    //.constant('BASE_URL', 'https://vast-citadel-12459.herokuapp.com/')
+    .constant('BASE_URL', 'http://localhost:3000/')
+    .factory('action', ['noteModal', 'pwordModal', 'cardModal', 'ops', 'parse', 'resources', function (noteModal, pwordModal, cardModal, ops, parse, resources) {
         var fac = {};
         fac.openNote = function (scope, note, mode) {
-            var noteModal = noteModalFac.newNote(scope, note, mode);
+            var modal = noteModal.newNote(scope, note);
             var resource = resources.getNoteResource();
-            noteModal.result.then(
-                //Done
+            modal.result.then(
                 function (newNote) {
-                    switch (mode) {
-                        case 2:
-                            //Make new;
-                            console.log('Making New Note!');
-                            ops.save(parseService.parseNote(newNote), resource);
-                            break;
-                        default:
-                            //Update same;
-                            console.log('Saving the note!');
-                            ops.update(parseService.parseNote(newNote), resource);
-                            break;
+                    if (mode) {
+                        //Make new;
+                        console.log('Making New Note!');
+                        ops.save(parse.note(newNote), resource);
+                    } else {
+                        //Update same;
+                        console.log('Saving the note!');
+                        ops.update(parse.note(newNote), resource);
                     }
                 },
                 //Cancelled/Dismissed
@@ -33,23 +28,20 @@ angular.module('myVault')
             );
         };
         fac.openPword = function (scope, pword, mode) {
-            var pwordModal = pwordModalFac.newPword(scope, pword, mode);
+            var modal = pwordModal.newPword(scope, pword);
             var resource = resources.getPwordResource();
-            pwordModal.result.then(
+            modal.result.then(
                 function (newPword) {
-                    switch (mode) {
-                        case 2:
-                            //Make new;
-                            console.log('Making New Pword!');
-                            console.log(newPword);
-                            ops.save(parseService.parsePword(newPword), resource);
-                            break;
-                        default:
-                            //Update same;
-                            console.log('Saving the pword!');
-                            console.log(newPword);
-                            ops.update(parseService.parsePword(newPword), resource);
-                            break;
+                    if (mode) {
+                        //Make new;
+                        console.log('Making New Pword!');
+                        console.log(newPword);
+                        ops.save(parse.pword(newPword), resource);
+                    } else {
+                        //Update same;
+                        console.log('Saving the pword!');
+                        console.log(newPword);
+                        ops.update(parse.pword(newPword), resource);
                     }
                 },
                 function (reason) {
@@ -58,23 +50,20 @@ angular.module('myVault')
             );
         };
         fac.openCard = function (scope, card, mode) {
-            var cardModal = cardModalFac.newCard(scope, card, mode);
+            var modal = cardModal.newCard(scope, card);
             var resource = resources.getCardResource();
-            cardModal.result.then(
+            modal.result.then(
                 function (newCard) {
-                    switch (mode) {
-                        case 2:
-                            //Make new;
-                            console.log('Making New Card!');
-                            console.log(newCard);
-                            ops.save(parseService.parseCard(newCard), resource);
-                            break;
-                        default:
-                            //Update same;
-                            console.log('Saving the card!');
-                            console.log(newCard);
-                            ops.update(parseService.parseCard(newCard), resource);
-                            break;
+                    if (mode) {
+                        //Make new;
+                        console.log('Making New Card!');
+                        console.log(newCard);
+                        ops.save(parse.card(newCard), resource);
+                    } else {
+                        //Update same;
+                        console.log('Saving the card!');
+                        console.log(newCard);
+                        ops.update(parse.card(newCard), resource);
                     }
                 },
                 function (reason) {
@@ -102,20 +91,17 @@ angular.module('myVault')
             var id, resource;
             switch (type) {
                 default:
-                case 0:
-                    //Note Resource
+                case 0://Note Resource
                     id = scope.notes[index]._id;
                     resource = resources.getNoteResource();
                     scope.notes.splice(index, 1);
                     break;
-                case 1:
-                    //Password Resource
+                case 1://Password Resource
                     id = scope.pwords[index]._id;
                     resource = resources.getPwordResource();
                     scope.pwords.splice(index, 1);
                     break;
-                case 2:
-                    //Cards Resource
+                case 2://Cards Resource
                     id = scope.cards[index]._id;
                     resource = resources.getCardResource();
                     scope.cards.splice(index, 1);
@@ -125,73 +111,68 @@ angular.module('myVault')
         };
         return fac;
     }])
-    .factory('noteModalFac', ['$uibModal', 'parseService', function ($uibModal, parseService) {
-
-        var fac = {};
-
-        var modalOptions = {
+    .factory('modalOpts', [function () {
+        return {
             animation: true,
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
             size: 'md',
             controllerAs: '$ctrl',
-            templateUrl: '../views/modals/note.html',
-            controller: 'NoteModalController'
+            controller: 'ModalController'
         };
-
-        fac.newNote = function (scope, note, mode) {
-            var noteModal = {};
+    }])
+    .factory('msgModal', ['$uibModal', 'modalOpts', function ($uibModal, modalOpts) {
+        var fac = {};
+        var modalOptions = modalOpts;
+        modalOptions.size = 'sm';
+        modalOptions.templateUrl = '../views/modals/msg.html';
+        modalOptions.controller = 'MsgModalController';
+        fac.open = function (scope, msg) {
+            var modal = {};
             modalOptions.scope = scope;
-            modalOptions.resolve = { mode: mode };
-            modalOptions.resolve.note = parseService.parseNote(note);
+            modalOptions.resolve = { msg: msg };
+            modal = $uibModal.open(modalOptions);
+            return modal;
+        };
+        return fac;
+    }])
+    .factory('noteModal', ['$uibModal', 'parse', 'modalOpts', function ($uibModal, parse, modalOpts) {
+        var fac = {};
+        var modalOptions = modalOpts;
+        fac.newNote = function (scope, note) {
+            var noteModal = {};
+            modalOptions.templateUrl = '../views/modals/note.html',
+                modalOptions.scope = scope;
+            modalOptions.resolve = {};
+            modalOptions.resolve.object = parse.note(note);
             noteModal = $uibModal.open(modalOptions);
             return noteModal;
         };
-
         return fac;
     }])
-    .factory('pwordModalFac', ['$uibModal', 'parseService', function ($uibModal, parseService) {
+    .factory('pwordModal', ['$uibModal', 'parse', 'modalOpts', function ($uibModal, parse, modalOpts) {
         var fac = {};
-
-        var modalOptions = {
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            size: 'md',
-            controllerAs: '$ctrl',
-            templateUrl: '../views/modals/pword.html',
-            controller: 'PwordModalController'
-        };
-
-        fac.newPword = function (scope, pword, mode) {
+        var modalOptions = modalOpts;
+        fac.newPword = function (scope, pword) {
             var pwordModal = {};
+            modalOptions.templateUrl = '../views/modals/pword.html';
             modalOptions.scope = scope;
-            modalOptions.resolve = { mode: mode };
-            modalOptions.resolve.pword = parseService.parsePword(pword);
+            modalOptions.resolve = {};
+            modalOptions.resolve.object = parse.pword(pword);
             pwordModal = $uibModal.open(modalOptions);
             return pwordModal;
         };
-
         return fac;
     }])
-    .factory('cardModalFac', ['$uibModal', 'parseService', function ($uibModal, parseService) {
+    .factory('cardModal', ['$uibModal', 'parse', 'modalOpts', function ($uibModal, parse, modalOpts) {
         var fac = {};
-
-        var modalOptions = {
-            animation: true,
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            size: 'md',
-            controllerAs: '$ctrl',
-            templateUrl: '../views/modals/card.html',
-            controller: 'CardModalController'
-        };
-
-        fac.newCard = function (scope, card, mode) {
+        var modalOptions = modalOpts;
+        fac.newCard = function (scope, card) {
             var cardModal = {};
+            modalOptions.templateUrl = '../views/modals/card.html';
             modalOptions.scope = scope;
-            modalOptions.resolve = { mode: mode };
-            modalOptions.resolve.card = parseService.parseCard(card);
+            modalOptions.resolve = {};
+            modalOptions.resolve.object = parse.card(card);
             cardModal = $uibModal.open(modalOptions);
             return cardModal;
         };
@@ -215,112 +196,136 @@ angular.module('myVault')
     }])
     .factory('resources', ['BASE_URL', '$resource', '$localStorage', function (BASE_URL, $resource, $localStorage) {
         var fac = {};
-
         fac.getLoginResource = function () {
             return $resource(BASE_URL + 'users/signin', null, {
-                save: {
-                    method: 'POST'
-                }
+                save: { method: 'POST' }
             });
         };
-
         fac.getLogoutResource = function () {
             return $resource(BASE_URL + 'users/signout', null, {
-                get: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                }
+                get: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) } }
             });
         };
-
         fac.getRegisterResource = function () {
             return $resource(BASE_URL + 'users/register', null, {
-                save: {
-                    method: 'POST'
-                }
+                save: { method: 'POST' }
             });
         };
-
         fac.getNoteResource = function () {
             return $resource(BASE_URL + 'notes/:id', null, {
-                update: {
-                    method: 'PUT',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                get: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                save: {
-                    method: 'POST',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                query: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) },
-                    isArray: true
-                },
-                remove: {
-                    method: 'DELETE',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                }
+                update: { method: 'PUT', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                get: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                save: { method: 'POST', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                query: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) }, isArray: true },
+                remove: { method: 'DELETE', headers: { 'x-access-token': $localStorage.fetch('token', null) } }
             });
         };
-
         fac.getPwordResource = function () {
             return $resource(BASE_URL + 'pwords/:id', null, {
-                update: {
-                    method: 'PUT',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                get: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                save: {
-                    method: 'POST',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                query: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) },
-                    isArray: true
-                },
-                remove: {
-                    method: 'DELETE',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                }
+                update: { method: 'PUT', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                get: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                save: { method: 'POST', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                query: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) }, isArray: true },
+                remove: { method: 'DELETE', headers: { 'x-access-token': $localStorage.fetch('token', null) } }
             });
         };
-
         fac.getCardResource = function () {
             return $resource(BASE_URL + 'cards/:id', null, {
-                update: {
-                    method: 'PUT',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                get: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                save: {
-                    method: 'POST',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                },
-                query: {
-                    method: 'GET',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) },
-                    isArray: true
-                },
-                remove: {
-                    method: 'DELETE',
-                    headers: { 'x-access-token': $localStorage.fetch('token', null) }
-                }
+                update: { method: 'PUT', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                get: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                save: { method: 'POST', headers: { 'x-access-token': $localStorage.fetch('token', null) } },
+                query: { method: 'GET', headers: { 'x-access-token': $localStorage.fetch('token', null) }, isArray: true },
+                remove: { method: 'DELETE', headers: { 'x-access-token': $localStorage.fetch('token', null) } }
             });
         };
         return fac;
     }])
-    .factory('ops', [function () {
+    .factory('notesRepo', ['$rootScope', 'resources', 'handle', function ($rootScope, resources, handle) {
+        var resource = resources.getNoteResource();
+        var notes = [];
+        var fac = {};
+        fac.get = function () {
+            return notes;
+        };
+        fac.startFetching = function () {
+            resource.query().$promise.then(
+                function (res) {
+                    notes = res;
+                    //Broadcast notes ready! TODO
+                    console.log('<-----notes ready broadcasting now----->')
+                    $rootScope.$broadcast('notes-ready', notes);
+                },
+                function (res) {
+                    handle('fetch notes', res);
+                }
+            );
+        };
+        return fac;
+    }])
+    .factory('pwordsRepo', ['$rootScope', 'resources', 'handle', function ($rootScope, resources, handle) {
+        var resource = resources.getPwordResource();
+        var pwords = [];
+        var fac = {};
+        fac.get = function () {
+            return pwords;
+        };
+        fac.startFetching = function () {
+            resource.query().$promise.then(
+                function (res) {
+                    pwords = res;
+                    //Broadcast notes ready! TODO
+                    console.log('<-----pwords ready broadcasting now----->')
+                    $rootScope.$broadcast('pwords-ready', pwords);
+                },
+                function (res) {
+                    handle('fetch passwords', res);
+                }
+            );
+        };
+        return fac;
+    }])
+    .factory('cardsRepo', ['$rootScope', 'resources', 'handle', function ($rootScope, resources, handle) {
+        var resource = resources.getCardResource();
+        var cards = [];
+        var fac = {};
+        fac.get = function () {
+            return cards;
+        };
+        fac.startFetching = function () {
+            resource.query().$promise.then(
+                function (res) {
+                    cards = res;
+                    //Broadcast notes ready! TODO
+                    console.log('<-----cards ready broadcasting now----->')
+                    $rootScope.$broadcast('cards-ready', cards);
+                },
+                function (res) {
+                    handle('fetch cards', res);
+                }
+            );
+        };
+        return fac;
+    }])
+    .factory('handle', ['$localStorage', '$state', function ($localStorage, $state) {
+        return function (op, res) {
+            var modal = {};
+            var msg = '';
+            if (res.status == 401) {
+                if ($localStorage.fetch('token', null) == null)
+                    msg = 'Unauthorized Access! Please Login/Register!';
+                else {
+                    msg = 'Session timedout! Please login again!';
+                    //Try to renew it! TODO
+                }
+            } else {
+                msg = 'Sorry! Couldn\'t ' + op + '! Please try again!';
+            }
+            $rootScope.$broadcast('new-msg', msg, function (modal) {
+                modal.result.then(function (res) { }, function (res) { if (res.status == 401) $state.transitionTo('login'); });
+            });
+        };
+    }])
+    .factory('ops', ['$state', 'handle', function ($state, handle) {
         var fac = {};
         fac.save = function (object, resource) {
             resource.save(JSON.stringify(object))
@@ -329,9 +334,10 @@ angular.module('myVault')
                 function (res) {
                     console.log('Saved!');
                 },
-                function (reason) {
-                    console.log('Error Saving!', reason);
-                    //Display msg to user
+                function (res) {
+                    console.log(res);
+                    console.log('Error Saving!');
+                    handle('save', res);
                 }
                 );
         };
@@ -344,6 +350,7 @@ angular.module('myVault')
                 },
                 function (res) {
                     console.log('Could not Delete id :', _id);
+                    handle('delete', res);
                 }
                 );
         };
@@ -356,6 +363,7 @@ angular.module('myVault')
                 },
                 function (res) {
                     console.log('Deletion of all failed!');
+                    handle('delete', res);
                 }
                 );
         };
@@ -364,17 +372,18 @@ angular.module('myVault')
                 .$promise
                 .then(
                 function (res) {
-                    console.log('Updated Note! id: ', object._id);
+                    console.log('Updated! id: ', object._id);
                 },
                 function (res) {
                     console.log('Update failed! id: ', object._id);
+                    handle('update', res);
                 }
                 );
         };
         return fac;
     }])
-    .service('parseService', [function () {
-        this.parseNote = function (note) {
+    .service('parse', [function () {
+        this.note = function (note) {
             var n = {
                 title: note.title,
                 note: note.note,
@@ -385,7 +394,7 @@ angular.module('myVault')
                 n._id = note._id;
             return n;
         };
-        this.parsePword = function (pword) {
+        this.pword = function (pword) {
             var p = {
                 title: pword.title,
                 username: pword.username,
@@ -399,7 +408,7 @@ angular.module('myVault')
                 p._id = pword._id;
             return p;
         };
-        this.parseCard = function (card) {
+        this.card = function (card) {
             var c = {
                 title: card.title,
                 cardNo: card.cardNo,
@@ -451,17 +460,10 @@ angular.module('myVault')
                 );
         };
     }])
-    .service('logoutService', ['resources', '$state', '$timeout', function (resources, $state, $timeout) {
-        var resource = resources.getLogoutResource();
+    .service('logoutService', ['resources', '$state', '$timeout', '$localStorage', function (resources, $state, $timeout, $localStorage) {
         this.signOut = function () {
-            resource.get().$promise.then(
-                function (res) {
-                    console.log('User Signed Out');
-                },
-                function (res) {
-                    console.log('Signout failed!');
-                }
-            )
+            resources.getLogoutResource().get();
+            $localStorage.store('token', null);
             $timeout(function () {
                 $state.transitionTo('login');
             }, 10);

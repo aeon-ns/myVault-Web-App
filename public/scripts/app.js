@@ -3,18 +3,14 @@
 angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
-
-            // route for the home page
             .state('login', {
                 url: '/',
                 templateUrl: '../views/login.html'
             })
-
             .state('appCommon', {
                 templateUrl: '../views/app_main.html',
                 abstract: true
             })
-
             .state('welcome', {
                 url: '/welcome',
                 parent: 'appCommon',
@@ -30,9 +26,14 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     'content@appCommon': {
                         templateUrl: '../views/welcome.html'
                     }                    
+                },
+                resolve: {
+                    notes: ['notesRep', function(notesRep) {
+                        notesRep.startFetching();
+                        return [];
+                    }]
                 }
             })
-
             .state('pinned', {
                 url: '/pinned',
                 parent: 'appCommon',
@@ -51,9 +52,6 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }
                 },
                 resolve: {
-                    notes:['resources', function(resources){
-                        return resources.getNoteResource().query();
-                    }],
                     pwords: ['resources', function(resources) {
                         return resources.getPwordResource().query();
                     }],
@@ -65,7 +63,6 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }]
                 }
             })
-
             .state('notes', {
                 url: '/notes',
                 parent: 'appCommon',
@@ -92,7 +89,6 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }]
                 }
             })
-
             .state('passwords', {
                 url: '/passwords',
                 parent: 'appCommon',
@@ -119,7 +115,6 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }]
                 }
             })
-
             .state('cards', {
                 url: '/cards',
                 parent: 'appCommon',
@@ -152,7 +147,6 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }]
                 }
             })
-
         $urlRouterProvider.otherwise('/');
     })
 ;
