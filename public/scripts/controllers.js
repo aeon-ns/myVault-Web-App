@@ -37,7 +37,7 @@ angular.module('myVault')
             return viewLocation === $location.path();
         };
     }])
-    .controller('NavbarController', ['$scope', 'action', 'logoutService', 'MODE_NEW','msgModal', function ($scope, action, logoutService, MODE_NEW, msgModal) {
+    .controller('NavbarController', ['$scope', 'action', 'logoutService', 'MODE_NEW', 'msgModal', function ($scope, action, logoutService, MODE_NEW, msgModal) {
         //Searchbar
         $scope.addNote = function () {
             action.openNote($scope, { account: true, pinned: false }, MODE_NEW);
@@ -51,11 +51,16 @@ angular.module('myVault')
         $scope.signOut = function () {
             logoutService.signOut();
         };
-        $scope.$on('new-msg', function(event, msg, callback) {
+        $scope.$on('new-msg', function (event, msg, callback) {
             var modal = msgModal.open($scope, msg);
             callback(modal);
             event.preventDefault();
         });
+    }])
+    .controller('WelcomeController', ['notesRepo', 'pwordsRepo', 'cardsRepo', function (notesRepo, pwordsRepo, cardsRepo) {
+        notesRepo.startFetching();
+        pwordsRepo.startFetching();
+        cardsRepo.startFetching();
     }])
     .controller('PinnedController', ['$scope', 'notesRepo', 'pwords', 'cards', 'action', 'MODE_EDIT', 'accService', 'ops', 'resources', function ($scope, notesRepo, pwords, cards, action, MODE_EDIT, accService, ops, resources) {
         $scope.account = accService.getCurrent();
@@ -66,7 +71,7 @@ angular.module('myVault')
         $scope.notes = notesRepo.get();
         $scope.pwords = pwords;
         $scope.cards = cards;
-        $scope.$on('notes-ready', function(event, data) {
+        $scope.$on('notes-ready', function (event, data) {
             $scope.notes = data;
             event.preventDefault();
         });
@@ -184,10 +189,10 @@ angular.module('myVault')
                 $ctrl.object.hasCustom = false;
         };
     })
-    .controller('MsgModalController', function($uibModalInstance, msg) {
+    .controller('MsgModalController', function ($uibModalInstance, msg) {
         var $ctrl = this;
-        $ctrl.msg = msg;
-        $ctrl.close = function() {
+        $ctrl.msg = msg.msg;
+        $ctrl.close = function () {
             $uibModalInstance.dismiss('cancel');
         };
     })

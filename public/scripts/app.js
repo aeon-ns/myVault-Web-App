@@ -24,14 +24,9 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                         controller: 'NavbarController'
                     },
                     'content@appCommon': {
-                        templateUrl: '../views/welcome.html'
-                    }                    
-                },
-                resolve: {
-                    notes: ['notesRep', function(notesRep) {
-                        notesRep.startFetching();
-                        return [];
-                    }]
+                        templateUrl: '../views/welcome.html',
+                        controller: 'WelcomeController'
+                    }
                 }
             })
             .state('pinned', {
@@ -52,13 +47,13 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
                     }
                 },
                 resolve: {
-                    pwords: ['resources', function(resources) {
+                    pwords: ['resources', function (resources) {
                         return resources.getPwordResource().query();
                     }],
                     cards: ['resources', function (resources) {
                         return resources.getCardResource().query();
                     }],
-                    account: ['accService', function(accService){
+                    account: ['accService', function (accService) {
                         return accService.getCurrent();
                     }]
                 }
@@ -149,4 +144,4 @@ angular.module('myVault', ['ui.router', 'ngResource', 'ui.bootstrap'])
             })
         $urlRouterProvider.otherwise('/');
     })
-;
+    ;

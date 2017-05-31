@@ -240,7 +240,7 @@ angular.module('myVault')
         };
         return fac;
     }])
-    .factory('notesRepo', ['$rootScope', 'resources', 'handle', function ($rootScope, resources, handle) {
+    .factory('notesRepo', ['$rootScope', 'resources', 'handle', '$state', function ($rootScope, resources, handle, $state) {
         var resource = resources.getNoteResource();
         var notes = [];
         var fac = {};
@@ -251,7 +251,6 @@ angular.module('myVault')
             resource.query().$promise.then(
                 function (res) {
                     notes = res;
-                    //Broadcast notes ready! TODO
                     console.log('<-----notes ready broadcasting now----->')
                     $rootScope.$broadcast('notes-ready', notes);
                 },
@@ -273,7 +272,6 @@ angular.module('myVault')
             resource.query().$promise.then(
                 function (res) {
                     pwords = res;
-                    //Broadcast notes ready! TODO
                     console.log('<-----pwords ready broadcasting now----->')
                     $rootScope.$broadcast('pwords-ready', pwords);
                 },
@@ -295,7 +293,6 @@ angular.module('myVault')
             resource.query().$promise.then(
                 function (res) {
                     cards = res;
-                    //Broadcast notes ready! TODO
                     console.log('<-----cards ready broadcasting now----->')
                     $rootScope.$broadcast('cards-ready', cards);
                 },
@@ -320,8 +317,8 @@ angular.module('myVault')
             } else {
                 msg = 'Sorry! Couldn\'t ' + op + '! Please try again!';
             }
-            $rootScope.$broadcast('new-msg', msg, function (modal) {
-                modal.result.then(function (res) { }, function (res) { if (res.status == 401) $state.transitionTo('login'); });
+            $rootScope.$broadcast('new-msg', { msg: msg }, function (modal) {
+                modal.result.then(function (res) { }, function (result) { if (res.status == 401) $state.transitionTo('login'); });
             });
         };
     }])

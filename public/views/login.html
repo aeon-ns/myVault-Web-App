@@ -35,9 +35,15 @@
             <br>
             <br>
             <br>
-            <h4 class="t-white" ng-if="regSuccess">Registered Successfully! Sign In to continue.</h4>
-            <h4 class="t-white" ng-if="regFail">Registeration Failed! :( Sorry please try again!</h4>
-            <h4 class="t-white" ng-if="loginFail">Sign In Failed! Please check your username or password.</h4>
+            <!--<div class="alert alert-success alert-dismissible" role="alert" ng-if="regSuccess">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>                <strong>Registered Successfully!</strong> Sign In to continue.
+            </div>
+            <div class="alert alert-warning alert-dismissible" role="alert" ng-if="regFail">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>              <strong>Registeration Failed!</strong> :( Sorry please try again!
+            </div>-->
+            <div class="alert alert-danger alert-dismissible" role="alert" ng-if="loginFail">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>                <strong>Sign In Failed!</strong> Please check your username or password.
+            </div>
         </div>
     </div>
 </div>
