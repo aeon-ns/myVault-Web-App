@@ -1,8 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">Note
         <div class="btn-group pull-right" role="group" data-toggle="buttons">
-            <label class="btn btn-danger btn-sm" ng-class="{active: $ctrl.object.account}" ng-click="$ctrl.setAccount(true)"><input type="radio">Personal</label>
-            <label class="btn btn-danger btn-sm" ng-class="{active: !$ctrl.object.account}" ng-click="$ctrl.setAccount(false)"><input type="radio">Work</label>
+            <label class="btn btn-danger btn-sm" ng-class="{active: $ctrl.object.account}" ng-click="$ctrl.setAccount(true)">Personal</label>
+            <label class="btn btn-danger btn-sm" ng-class="{active: !$ctrl.object.account}" ng-click="$ctrl.setAccount(false)">Work</label>
         </div>
     </h3>
 </div>
@@ -10,13 +10,13 @@
     <div class="form-group row">
         <div class="col-sm-10">
             <div class="input-group input-group-sm">
-                <span class="input-group-addon ns">Title</span>
+                <span class="input-group-addon primary">Title</span>
                 <input class="form-control" type="text" placeholder="Title" ng-model="$ctrl.object.title">
             </div>
         </div>
         <div class="col-sm-2">
             <div class="btn-group pull-right" data-toggle="buttons">
-                <label class="btn btn-primary btn-sm" ng-class="{active: $ctrl.object.pinned}"> {{$ctrl.object.pinned?'Pinned ':'Pin '}}<span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': $ctrl.object.pinned}"></span> <input type="checkbox" ng-model="$ctrl.object.pinned"></label>
+                <label class="btn btn-primary btn-sm" ng-class="{active: $ctrl.object.pinned}" ng-model="$ctrl.object.pinned" uib-btn-checkbox> {{$ctrl.object.pinned?'Pinned ':'Pin '}}<span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': $ctrl.object.pinned}"></span></label>
             </div>
         </div>
     </div>

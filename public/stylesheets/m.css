@@ -48,8 +48,8 @@
 }
 .input-group-addon.info {
     color: rgb(255, 255, 255);
-    background-color: rgb(57, 179, 215);
-    border-color: rgb(38, 154, 188);
+    background-color: rgb(65, 158, 234);
+    border-color: rgb(45, 100, 144);
 }
 .input-group-addon.ns {
     color: rgb(255, 255, 255);
@@ -73,13 +73,12 @@
   padding: 27%;
 }
 .left { 
-border-right: 1px solid #222222;
-position: absolute; height: auto; width: 10%; left: 0; right: 10%; top: 0; bottom: 0;
+position: fixed; height: auto; width: 10%; left: 0; right: 10%; top: 0; bottom: 0;
 }
 .right {
 position: absolute; height: auto; width: 90%; left: 10%; right: 90%; top: 0; bottom: 0;
 }
-.top { 
+.topp { 
 position: absolute; height: 40px; width: auto; left: 0; right: 0; top: 0; bottom: auto;
 }
 .main {

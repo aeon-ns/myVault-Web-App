@@ -1,5 +1,5 @@
 {
-  "name": "myVault",
+  "name": "myvault",
   "authors": [
     "Nisheet Sharma <nisheethsharma@gmail.com>"
   ],
@@ -15,6 +15,10 @@
   "dependencies": {
     "angular-resource": "^1.6.4",
     "font-awesome": "^4.7.0",
-    "angular-ui-router": "^1.0.3"
+    "angular-ui-router": "^1.0.3",
+    "angular-animate": "^1.6.4",
+    "angular-touch": "^1.6.4",
+    "angular": "^1.6.4"
+    // "bootstrap": "^3.3.7"
   }
 }

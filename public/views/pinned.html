@@ -5,8 +5,8 @@
         </div>
         <div class="col-sm-3 col-sm-offset-1" style="padding:2%">
             <div class="btn-group pull-right" role="group" data-toggle="buttons">
-                <label class="btn btn-danger" ng-class="{active: account}" ng-click="setActiveAcc(true)"><input type="radio">Personal</label>
-                <label class="btn btn-danger" ng-class="{active: !account}" ng-click="setActiveAcc(false)"><input type="radio">Work</label>
+                <label title="Switch to Personal Account" data-toggle="tooltip" class="btn btn-danger" ng-class="{active: account}" ng-click="setActiveAcc(true)"><input type="radio">Personal</label>
+                <label title="Switch to Work Account" data-toggle="tooltip" class="btn btn-danger" ng-class="{active: !account}" ng-click="setActiveAcc(false)"><input type="radio">Work</label>
             </div>
         </div>
     </div>
@@ -22,9 +22,9 @@
                         </div>
                         <div class="col-xs-6 col-md-4">
                             <h4>
-                                <a class="col-sm-4" ng-click="editNote(note)"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="col-sm-4" ng-click="pinIt(note, 0)"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': note.pinned}"></span></a>
-                                <a class="col-sm-4" ng-click="delIt($index, 0)"><span class="glyphicon glyphicon-trash"></span> </a>
+                                <a class="col-xs-4" ng-click="editNote(note)" title="Edit" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-xs-4" ng-click="pinIt(note, 0)" title="{{note.pinned?'Unpin it':'Pin it'}}" data-toggle="tooltip"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': note.pinned}"></span></a>
+                                <a class="col-xs-4" ng-click="delIt($index, 0)" title="Delete" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span> </a>
                             </h4>
                         </div>
                     </div>
@@ -44,9 +44,9 @@
                         </div>
                         <div class="col-xs-6 col-md-4">
                             <h4>
-                                <a class="col-sm-4" ng-click="editPword(pword)"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="col-sm-4" ng-click="pinIt(pword, 1)"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': pword.pinned}"></span></a>
-                                <a class="col-sm-4" ng-click="delIt($index, 1)"><span class="glyphicon glyphicon-trash"></span> </a>
+                                <a class="col-xs-4" ng-click="editPword(pword)" title="Edit" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-xs-4" ng-click="pinIt(pword, 1)" title="{{pword.pinned?'Unpin it':'Pin it'}}" data-toggle="tooltip"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': pword.pinned}"></span></a>
+                                <a class="col-xs-4" ng-click="delIt($index, 1)" title="Delete" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></a>
                             </h4>
                         </div>
                     </div>
@@ -66,9 +66,9 @@
                         </div>
                         <div class="col-xs-6 col-md-4">
                             <h4>
-                                <a class="col-sm-4" ng-click="editCard(card)"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a class="col-sm-4" ng-click="pinIt(card, 2)"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': card.pinned}"></span></a>
-                                <a class="col-sm-4" ng-click="delIt($index, 2)"><span class="glyphicon glyphicon-trash"></span> </a>
+                                <a class="col-xs-4" ng-click="editCard(card)" title="Edit" data-toggle="tooltip"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a class="col-xs-4" ng-click="pinIt(card, 2)" title="{{card.pinned?'Unpin it':'Pin it'}}" data-toggle="tooltip"><span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': card.pinned}"></span></a>
+                                <a class="col-xs-4" ng-click="delIt($index, 2)" title="Delete" data-toggle="tooltip"><span class="glyphicon glyphicon-trash"></span></a>
                             </h4>
                         </div>
                     </div>

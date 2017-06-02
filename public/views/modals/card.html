@@ -1,8 +1,8 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">Card
         <div class="btn-group pull-right" role="group" data-toggle="buttons">
-            <label class="btn btn-danger btn-sm" ng-class="{active: $ctrl.object.account}"><input ng-click="$ctrl.setAccount(true)"   type="radio">Personal</label>
-            <label class="btn btn-danger btn-sm" ng-class="{active: !$ctrl.object.account}"><input ng-click="$ctrl.setAccount(false)"   type="radio">Work</label>
+            <label class="btn btn-danger btn-sm" ng-class="{active: $ctrl.object.account}" ng-click="$ctrl.setAccount(true)">Personal</label>
+            <label class="btn btn-danger btn-sm" ng-class="{active: !$ctrl.object.account}" ng-click="$ctrl.setAccount(false)">Work</label>
         </div>
     </h3>
 </div>
@@ -16,7 +16,10 @@
         </div>
         <div class="col-sm-2">
             <div class="btn-group pull-right" data-toggle="buttons">
-                <label class="btn btn-primary btn-sm" ng-class="{active: $ctrl.object.pinned}"> {{$ctrl.object.pinned?'Pinned ':'Pin '}}<span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': $ctrl.object.pinned}"></span><input   type="checkbox" ng-model="$ctrl.object.pinned"></label>
+                <label class="btn btn-primary btn-sm" ng-class="{active: $ctrl.object.pinned}" ng-model="$ctrl.object.pinned" uib-btn-checkbox> 
+                    {{$ctrl.object.pinned?'Pinned ':'Pin '}}
+                    <span class="glyphicon glyphicon-map-marker" ng-class="{'t-warn': $ctrl.object.pinned}"></span>
+                </label>
             </div>
         </div>
     </div>
@@ -37,7 +40,7 @@
             <span class="input-group-addon primary">Expiration</span>
             <span class="input-group-addon info">Month</span>
             <input id="expMonth" name="expMonth" class="form-control" placeholder="MM" type="number" ng-model="$ctrl.object.expMonth">
-            <span class="input-group-addon success">Year</span>
+            <span class="input-group-addon info">Year</span>
             <input id="expYear" name="expYear" class="form-control" placeholder="YYYY" type="number" min="17" ng-model="$ctrl.object.expYear"
                 maxlength="4">
             <span class="input-group-addon primary">CVV/CVV2</span>
@@ -59,7 +62,7 @@
                     <span class="input-group-addon primary">Value</span>
                     <input class="form-control" type="{{$ctrl.fieldShow[$index]?'text':'password'}}" placeholder="Field Value" ng-model="field.value">
                     <div class="input-group-btn" data-toggle="buttons">
-                        <label class="btn btn-primary"><span class="glyphicon" ng-class="{'glyphicon-eye-open': !$ctrl.fieldShow[$index],'glyphicon-eye-close': $ctrl.fieldShow[$index]}"><input type="checkbox" ng-model="$ctrl.fieldShow[$index]"></span></label>
+                        <label class="btn btn-primary" ng-model="$ctrl.fieldShow[$index]" uib-btn-checkbox><span class="glyphicon" ng-class="{'glyphicon-eye-open': !$ctrl.fieldShow[$index],'glyphicon-eye-close': $ctrl.fieldShow[$index]}"></span></label>
                     </div>
                 </div>
             </div>

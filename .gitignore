@@ -1,1 +1,5 @@
 node_modules/
+FrontEnd/
+.jshintrc
+.tmp/
+Gruntfile.js
