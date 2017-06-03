@@ -36,12 +36,22 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm" ng-init="months =['01 - January','02 - February','03 - March','04 - April','05 - May','06 - June','07 - July','08 - August','09 - September','10 - October','11 - November','12 - December']">
             <span class="input-group-addon primary">Expiration</span>
             <span class="input-group-addon info">Month</span>
-            <input id="expMonth" name="expMonth" class="form-control" placeholder="MM" type="number" ng-model="$ctrl.object.expMonth">
+            <!-- Single button -->
+            <!--<div class="input-group-btn" >
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.object.month?months[$ctrl.object.month-1]:'Month'}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="month in months"><a ng-click="$ctrl.setMonth($index)">{{month}}</a></li>
+                    </ul>
+            </div>-->
+            <!--<input id="expMonth" name="expMonth" class="form-control" placeholder="Month" type="text" ng-model="$ctrl.object.expMonth">-->
+            <input type="text" ng-model="selected" uib-typeahead="month for month in months | filter:$viewValue | limitTo:8" class="form-control">
             <span class="input-group-addon info">Year</span>
-            <input id="expYear" name="expYear" class="form-control" placeholder="YYYY" type="number" min="17" ng-model="$ctrl.object.expYear"
+            <input id="expYear" name="expYear" class="form-control" placeholder="Year" type="number" min="17" ng-model="$ctrl.object.expYear"
                 maxlength="4">
             <span class="input-group-addon primary">CVV/CVV2</span>
             <input id="cvv" name="cvv" class="form-control" placeholder="XXX" type="number" min="000" ng-model="$ctrl.object.cvv" maxlength="3">
