@@ -3,18 +3,16 @@
         <div class="col-sm-8">
             <h1>Pinned</h1>
         </div>
-        <div class="col-sm-3 col-sm-offset-1" style="padding:2%">
-            <div class="btn-group pull-right" role="group" data-toggle="buttons">
-                <label title="Switch to Personal Account" data-toggle="tooltip" class="btn btn-danger" ng-class="{active: account}" ng-click="setActiveAcc(true)"><input type="radio">Personal</label>
-                <label title="Switch to Work Account" data-toggle="tooltip" class="btn btn-danger" ng-class="{active: !account}" ng-click="setActiveAcc(false)"><input type="radio">Work</label>
-            </div>
+        <div class="col-sm-4" style="padding:20px">
+            <input type="text" class="form-control" placeholder="Filter Pinned Notes, Passwords, Cards" ng-model="pinnedFilter">
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12" ng-init="sortByAlpha = true">
             <h2>Notes</h2>
-            <p ng-if="!nresults.length">No pinned notes to show.</p>
-            <ul ng-if="nresults.length" class="list-unstyled" ng-repeat="note in notes | filter: {pinned: true, account: account} as nresults">
+            <p>Order By: <button class="btn btn-info btn-sm" ng-click="sortByAlpha=!sortByAlpha"> <span class="glyphicon" ng-class="{'glyphicon-sort-by-alphabet': sortByAlpha, 'glyphicon-sort-by-alphabet-alt': !sortByAlpha}"></span> </button> </p>
+            <p ng-if="!nresults.length">{{pinnedFilter?'No notes found matching the filter':'No pinned notes to show.'}}</p>
+            <ul ng-if="nresults.length" class="list-unstyled" ng-repeat="note in notes | orderBy:'title':sortByAlpha | filter: {$: pinnedFilter, pinned: true, account: account} as nresults">
                 <li class="nlist">
                     <div class="row">
                         <div class="col-xs-6 col-md-8" ng-click="editNote(note)">
@@ -35,8 +33,8 @@
     <div class="row">
         <div class="col-sm-12">
             <h2>Passwords</h2>
-            <p ng-if="!presults.length">No pinned passwords to show.</p>
-            <ul ng-if="presults.length" class="list-unstyled" ng-repeat="pword in pwords | filter: {pinned: true, account: account} as presults">
+            <p ng-if="!presults.length">{{pinnedFilter?'No passwords found matching the filter':'No pinned passwords to show.'}}</p>
+            <ul ng-if="presults.length" class="list-unstyled" ng-repeat="pword in pwords | filter: {$:pinnedFilter, pinned: true, account: account} as presults">
                 <li class="nlist">
                     <div class="row">
                         <div class="col-xs-6 col-md-8" ng-click="editPword(pword)">
@@ -57,8 +55,8 @@
     <div class="row">
         <div class="col-sm-12">
             <h2>Cards</h2>
-            <p ng-if="!cresults.length">No pinned cards to show.</p>
-            <ul ng-if="cresults.length" class="list-unstyled" ng-repeat="card in cards | filter: {pinned: true, account: account} as cresults">
+            <p ng-if="!cresults.length">{{pinnedFilter?'No cards found matching the filter':'No pinned cards to show.'}}</p>
+            <ul ng-if="cresults.length" class="list-unstyled" ng-repeat="card in cards | filter: {$: pinnedFilter, pinned: true, account: account} as cresults">
                 <li class="nlist">
                     <div class="row">
                         <div class="col-xs-6 col-md-8" ng-click="editCard(card)">

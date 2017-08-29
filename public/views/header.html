@@ -6,23 +6,35 @@
                    <span class="icon-bar"></span>
                    <span class="icon-bar"></span>
                    <span class="icon-bar"></span>
-               </button>
+            </button>
+            <strong class="navbar-brand">
+                myVault 
+                <i ng-class="{'glyphicon glyphicon-home': !loading, 'fa fa-circle-o-notch fa-spin fa-fw':loading}"></i>
+            </strong>
         </div>
         <div id="navbar1" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav" style="padding-top:7px">
-                <li>
-                    <div class="btn-group" role="group" data-toggle="buttons">
-                        <button class="btn btn-success" ng-click="addNote()"><span class="glyphicon glyphicon-plus"></span> Note</button>
-                        <button class="btn btn-success" ng-click="addPword()"><span class="glyphicon glyphicon-plus"></span> Password</button>
-                        <button class="btn btn-success" ng-click="addCard()"><span class="glyphicon glyphicon-plus"></span> Card</button>
-                    </div>
+            <ul class="nav navbar-nav">
+                <li ng-class="{active: account}">
+                    <a title="Switch to Personal Account" data-toggle="tooltip" ng-click="setActiveAcc(true)">Personal</a>
                 </li>
-                <li></li>
-                <li></li>
+                <li ng-class="{active: !account}">
+                    <a title="Switch to Work Account" data-toggle="tooltip" ng-click="setActiveAcc(false)">Work</a>
+                </li>
             </ul>
-            <ul class="nav navbar-right" style="padding-top:7px">
+            <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <button class="btn btn-link" ng-click="signOut()">Sign Out <span class="glyphicon glyphicon-log-out"></span></button>
+                    <button class="btn btn-link navbar-btn" ng-click="addNote()"><span class="glyphicon glyphicon-plus"></span> Note</button>
+                </li>
+                <li class="active">
+                    <button class="btn btn-link navbar-btn" ng-click="addPword()"><span class="glyphicon glyphicon-plus"></span> Password</button>
+                </li>
+                <li>
+                    <button class="btn btn-link navbar-btn" ng-click="addCard()"><span class="glyphicon glyphicon-plus"></span> Card</button>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button class="btn btn-link navbar-btn" ng-click="signOut()">Sign Out <span class="glyphicon glyphicon-log-out"></span></button>
                 </li>
             </ul>
         </div>

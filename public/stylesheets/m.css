@@ -18,18 +18,6 @@
 .bg-color {
   background-color:#222222;
 }
-.b-rad-top {
-  border: 5px;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  border-color: darkgrey;
-}
-.b-rad-bottom {
-  border: 5px;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  border-color: #2F343A;
-}
 .bg-silver {
   background-color: #DDDDDD;
 }
@@ -69,7 +57,7 @@
 .al-right {
   text-align: right;
 }
-.pad33 {
+.login-pad {
   padding: 27%;
 }
 .left { 
