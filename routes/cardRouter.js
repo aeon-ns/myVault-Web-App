@@ -45,8 +45,8 @@ CardRouter.route('/:id')
             if (req.body.title) {
                 card.title = req.body.title,
                 card.cardNo = req.body.cardNo,
-                card.expMonth = req.body.expMonth,
-                card.expYear = req.body.expYear,
+                card.exp = req.body.exp,
+                card.cvv = req.body.cvv,
                 card.account = req.body.account,
                 card.hasCustom = req.body.hasCustom,
                 card.customFields = req.body.customFields;

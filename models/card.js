@@ -18,7 +18,7 @@ var customSchema = new Schema({
 
 var Card = new Schema({
     title: String,
-    cardNo: [],
+    cardNo: [Number],
     exp: Date,
     cvv: Number,
     pinned: {
