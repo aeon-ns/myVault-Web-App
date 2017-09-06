@@ -63,12 +63,28 @@ router.get('/signout', function(req, res, next) {
   req.logOut();
 });
 
-router.get('/google', function(req, res, next) {
-  //TODO
-});
+router.get('/facebook', passport.authenticate('facebook'), function(req,res){});
 
-router.get('/google/callback', function(req, res, next){
-  //TODO
+router.get('/facebook/callback', function(req, res, next){
+  passport.authenticate('facebook', function(err, user, info){ 
+    if(err) {
+      return next(err);
+    }
+    if(!user) {
+      return res.status(401).json({err: info});
+    }
+    req.logIn(user, function(err){
+      if(err) {
+        return res.status(500).json({err: 'Could not login user!'});
+      }
+      var token = Verify.getToken({ "username": user.username, "_id": user._id});
+      res.status(200).json({
+        status: 'Login Successful!',
+        success: true,
+        token: token
+      });
+    });
+  })(req,res,next);
 });
 
 module.exports = router;

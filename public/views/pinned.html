@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-8">
-            <h1>Pinned</h1>
+            <h1 class="head-c">Pinned</h1>
         </div>
         <div class="col-sm-4" style="padding:20px">
             <input type="text" class="form-control" placeholder="Filter Pinned Notes, Passwords, Cards" ng-model="pinnedFilter">
@@ -10,9 +10,8 @@
     <div class="row">
         <div class="col-sm-12" ng-init="sortByAlpha = true">
             <h2>Notes</h2>
-            <p>Order By: <button class="btn btn-info btn-sm" ng-click="sortByAlpha=!sortByAlpha"> <span class="glyphicon" ng-class="{'glyphicon-sort-by-alphabet': sortByAlpha, 'glyphicon-sort-by-alphabet-alt': !sortByAlpha}"></span> </button> </p>
             <p ng-if="!nresults.length">{{pinnedFilter?'No notes found matching the filter':'No pinned notes to show.'}}</p>
-            <ul ng-if="nresults.length" class="list-unstyled" ng-repeat="note in notes | orderBy:'title':sortByAlpha | filter: {$: pinnedFilter, pinned: true, account: account} as nresults">
+            <ul ng-if="nresults.length" class="list-unstyled" ng-repeat="note in notes | filter: {$: pinnedFilter, pinned: true, account: account} as nresults">
                 <li class="nlist">
                     <div class="row">
                         <div class="col-xs-6 col-md-8" ng-click="editNote(note)">

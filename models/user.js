@@ -10,6 +10,8 @@ var userSchema = new Schema({
     password: {
         type: String
     },
+    OauthId: String,
+    OauthToken: String,
     firstname: {
         type: String,
         default: ''
@@ -17,9 +19,7 @@ var userSchema = new Schema({
     lastname: {
         type: String,
         default: ''
-    },
-    oauthId: String,
-    oauthToken: String
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

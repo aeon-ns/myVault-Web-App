@@ -21,14 +21,17 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <p class="t-white" ng-if="login">New User?</p>
-                        <p class="t-white" ng-if="!login">Already Registered?</p>
-                        <button class="btn btn-link" ng-if="login" ng-click="setLogin(false)">Register</button>
-                        <button class="btn btn-link" ng-if="!login" ng-click="setLogin(true)">Sign In</button>
+                        <p class="t-white" ng-if="login">New User? <a class="btn btn-link" ng-if="login" ng-click="setLogin(false)">Register</a></p>
+                        <p class="t-white" ng-if="!login">Already Registered? <a class="btn btn-link" ng-if="!login" ng-click="setLogin(true)">Sign In</a></p>
                     </div>
                     <div class="col-sm-3">
-                        <button class="btn btn-primary" type="button" ng-if="login" ng-click="signIn()">Sign In</button>
-                        <button class="btn btn-primary" type="button" ng-if="!login" ng-click="signUp()">Sign Up</button>
+                        <button class="btn btn-primary" type="submit" ng-if="login" ng-click="signIn()">Sign In</button>
+                        <button class="btn btn-primary" type="submit" ng-if="!login" ng-click="signUp()">Sign Up</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <button class="btn btn-primary" ng-click="signFb()">Sign In from Facebook</button>
                     </div>
                 </div>
             </form>
@@ -39,7 +42,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>                <strong>Registered Successfully!</strong> Sign In to continue.
             </div>
             <div class="alert alert-warning alert-dismissible" role="alert" ng-if="regFail">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>              <strong>Registeration Failed!</strong> :( Sorry please try again!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>                <strong>Registeration Failed!</strong> :( Sorry please try again!
             </div>
             <div class="alert alert-danger alert-dismissible" role="alert" ng-if="loginFail">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>                <strong>Sign In Failed!</strong> Please check your username or password.

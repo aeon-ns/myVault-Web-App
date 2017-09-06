@@ -19,17 +19,28 @@ var cardRouter = require('./routes/cardRouter');
 
 var app = express();
 
-mongoose.connect(config.MONGO_DB_URI);
+//Secure traffice
+app.all('*', function (req, res, next) {
+  console.log('Incoming Req: Method: ' + req.method + ' Secure: ' + req.secure + ' Hostname: ' + req.hostname + ' Url: ' + req.url);
+  if (req.secure) {
+    return next();
+  }
+  console.log('Redirecting to : ' + 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+  //If 307 is not added to redirect, it will convert all requests to GET type automatically
+  //307 --> Temporary Redirect HTTP Code
+});
+
+mongoose.connect(config.MONGO_DB_URI, { useMongoClient: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
   // we're connected!
-  console.log("Connected correctly to MongoDb server");
+  console.log("Connected to MongoDb server");
 });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
-// uncomment after placing your favicon in /public
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.svg')));
 app.use(logger('dev'));
@@ -78,14 +89,11 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   console.log(err.message);
   console.log(err);
-  // render the error page
   res.status(err.status || 500);
-  //res.render('error');
   res.json({
     msg: err.message
   });
