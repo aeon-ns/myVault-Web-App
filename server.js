@@ -16,8 +16,6 @@ var users = require('./routes/users');
 var noteRouter = require('./routes/noteRouter');
 var pwordRouter = require('./routes/pwordRouter');
 var cardRouter = require('./routes/cardRouter');
-var gridCardRouter = require('./routes/gridRouter');
-var csvRouter = require('./routes/csvRouter');
 
 var app = express();
 
