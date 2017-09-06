@@ -19,17 +19,17 @@ var cardRouter = require('./routes/cardRouter');
 
 var app = express();
 
-//Secure traffice
-app.all('*', function (req, res, next) {
-  console.log('Incoming Req: Method: ' + req.method + ' Secure: ' + req.secure + ' Hostname: ' + req.hostname + ' Url: ' + req.url);
-  if (req.secure) {
-    return next();
-  }
-  console.log('Redirecting to : ' + 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
-  res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
-  //If 307 is not added to redirect, it will convert all requests to GET type automatically
-  //307 --> Temporary Redirect HTTP Code
-});
+//Secure traffic
+// app.all('*', function (req, res, next) {
+//   console.log('Incoming Req: Method: ' + req.method + ' Secure: ' + req.secure + ' Hostname: ' + req.hostname + ' Url: ' + req.url);
+//   if (req.secure) {
+//     return next();
+//   }
+//   console.log('Redirecting to : ' + 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+//   res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
+//   //If 307 is not added to redirect, it will convert all requests to GET type automatically
+//   //307 --> Temporary Redirect HTTP Code
+// });
 
 mongoose.connect(config.MONGO_DB_URI, { useMongoClient: true });
 var db = mongoose.connection;
