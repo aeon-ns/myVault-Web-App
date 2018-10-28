@@ -67,4 +67,3 @@ CardRouter.route('/:id')
     });
 
 module.exports = CardRouter;
-
