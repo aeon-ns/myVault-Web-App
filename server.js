@@ -1,23 +1,26 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var passport = require('passport');
-var mongoose = require('mongoose');
-var upload = require('express-fileupload');
+require('dotenv').config();
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
-var config = require('./config');
-var authenticate = require('./authenticate.js');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const upload = require('express-fileupload');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var noteRouter = require('./routes/noteRouter');
-var pwordRouter = require('./routes/pwordRouter');
-var cardRouter = require('./routes/cardRouter');
+const config = require('./config');
+const authenticate = require('./authenticate.js');
 
-var app = express();
+const index = require('./routes/index');
+const users = require('./routes/users');
+const noteRouter = require('./routes/noteRouter');
+const pwordRouter = require('./routes/pwordRouter');
+const cardRouter = require('./routes/cardRouter');
+
+const app = express();
 
 //Secure traffic
 // app.all('*', function (req, res, next) {
@@ -31,13 +34,19 @@ var app = express();
 //   //307 --> Temporary Redirect HTTP Code
 // });
 
-mongoose.connect(config.MONGO_DB_URI, { useMongoClient: true });
+mongoose.Promise = Promise;
+mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, { 
+  useMongoClient: true,
+  auth: {
+    authSource: process.env.DB_AUTH_SOURCE,
+    user: process.env.DB_USER,
+    password: process.env.DB_PWD
+  }
+});
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  // we're connected!
-  console.log("Connected to MongoDb server");
-});
+db.once('open', () => console.log("Connected to MongoDb server"));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
@@ -72,8 +81,10 @@ app.use(function (req, res, next) {
 });
 //-----------------------------------------------------------------------------------------------------
 
+// Serve static content
 app.use(express.static(path.join(__dirname, 'public')));
 
+// API Routes
 app.use('/', index);
 app.use('/users', users);
 app.use('/notes', noteRouter);
@@ -87,15 +98,16 @@ app.use(function (req, res, next) {
   next(err);
 });
 
-// error handler
+// Common Error Handler
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  console.log(err.message);
-  console.log(err);
+  res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
+  console.error('\nError:', err, '\n');
   res.status(err.status || 500);
   res.json({
-    msg: err.message
+    success: false,
+    message: err.message,
+    status: err.status
   });
 });
 
