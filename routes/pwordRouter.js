@@ -1,79 +1,84 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
+const Verify = require('./verify');
+const Pwords = require('../models/pword');
+const config = require('../config.js');
+const CryptoJS = require('crypto-js');
 
-var Verify = require('./verify');
-var Pwords = require('../models/pword');
+/* INTERNAL FUNCTIONS */
+function _encrypt(string) {
+	return CryptoJS.AES.encrypt(string, config.SECRET_KEY)
+		.toString();
+}
+function _decrypt(hashValue) {
+	return CryptoJS.AES.decrypt(
+		hashValue,
+		config.SECRET_KEY
+	).toString(
+		CryptoJS.enc.Utf8
+	);
+}
+function _encryptPword(pword) {
+	pword.password = _encrypt(pword.password);
+	if (pword.hasCustom) {
+		pword.customFields.forEach(customField => customField.value = _encrypt(customField.value));
+	}
+	return pword;
+}
+function _decryptPword(pword) {
+	pword.password = _decrypt(pword.password);
+	if (pword.hasCustom) {
+		pword.customFields.forEach(customField => customField.value = _decrypt(customField.value));
+	}
+	return pword;
+}
 
-var config = require('../config.js');
-
-var CryptoJS = require('crypto-js');
-
-var PwordRouter = express.Router();
+/* ROUTES */
+const PwordRouter = express.Router();
 PwordRouter.use(bodyParser.json());
 
 PwordRouter.route('/')
 
-	.get(Verify.verifyOrdinaryUser, function(req, res, next) {
-		req.query.forUser = req.decoded._id;
-		Pwords.find(req.query, function(err, pwords) {
-			if (err) return next(err);
-			//Decrypt
-			for (var i = 0; i < pwords.length; i++) {
-				var bytes = CryptoJS.AES.decrypt(
-					pwords[i].password,
-					config.SECRET_KEY
-				);
-				pwords[i].password = bytes.toString(CryptoJS.enc.Utf8);
-				if (pwords[i].hasCustom) {
-					for (var j = 0; j < pwords[i].customFields.length; j++) {
-						var bytes = CryptoJS.AES.decrypt(
-							pwords[i].customFields[j].value,
-							config.SECRET_KEY
-						);
-						pwords[i].customFields[j].value = bytes.toString(
-							CryptoJS.enc.Utf8
-						);
-					}
-				}
-			}
-			//Send Decrypted Data to client
-			res.json({
+	.get(Verify.verifyOrdinaryUser, async function (req, res, next) {
+		try {
+			req.query.forUser = req.decoded._id;
+			let pwords = await Pwords.find(req.query);
+			await pwords.forEach(pword => _decryptPword(pword));
+			return res.status(200).json({
 				success: true,
 				message: 'Passwords retrieved successfully.',
 				data: pwords
 			});
-		});
+		}
+		catch (err) {
+			return next(err);
+		}
 	})
 
-	.post(Verify.verifyOrdinaryUser, function(req, res, next) {
-		req.body.forUser = req.decoded._id;
-
-		//Encrypt
-		var hash = CryptoJS.AES.encrypt(req.body.password, config.SECRET_KEY);
-		req.body.password = hash.toString();
-
-		if (req.body.hasCustom) {
-			for (var j = 0; j < req.body.customFields.length; j++) {
-				hash = CryptoJS.AES.encrypt(
-					req.body.customFields[j].value,
-					config.SECRET_KEY
-				);
-				req.body.customFields[j].value = hash.toString();
+	.post(Verify.verifyOrdinaryUser, async function (req, res, next) {
+		try {
+			if (!req.body.password) {
+				return res.status(400).json({
+					success: false,
+					message: 'Bad Request. Password is required.'
+				});
 			}
-		}
-		//Save
-		Pwords.create(req.body, function(err, pword) {
-			if (err) return next(err);
-			res.json({
+			req.body.forUser = req.decoded._id;
+			req.body = await _encryptPword(req.body);
+			let pword = await Pwords.create(req.body);
+			return res.status(200).json({
 				success: true,
 				message: 'Password saved successfully.',
 				data: pword
 			});
-		});
+		}
+		catch (err) {
+			return next(err);
+		}
 	})
 
-	.delete(Verify.verifyOrdinaryUser, function(req, res, next) {
-		Pwords.remove({ forUser: req.decoded._id }, function(err, status) {
+	.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
+		Pwords.remove({ forUser: req.decoded._id }, function (err, status) {
 			if (err) return next(err);
 			res.json({
 				success: true,
@@ -85,8 +90,14 @@ PwordRouter.route('/')
 
 PwordRouter.route('/:id')
 
-	.put(Verify.verifyOrdinaryUser, function(req, res, next) {
-		Pwords.findById(req.params.id, function(err, pword) {
+	.put(Verify.verifyOrdinaryUser, function (req, res, next) {
+		if (!req.params.id) {
+			return res.status(400).json({
+				success: false,
+				message: 'Bad Request. Id is required.'
+			});
+		}
+		Pwords.findById(req.params.id, function (err, pword) {
 			if (err) return next(err);
 			if (pword.forUser != req.decoded._id) {
 				err.message = 'Unauthorized Access!';
@@ -118,9 +129,9 @@ PwordRouter.route('/:id')
 				pword.customFields = req.body.customFields;
 			}
 			pword.pinned = req.body.pinned;
-			pword.save(function(err, new_pword) {
+			pword.save(function (err, new_pword) {
 				if (err) return next(err);
-				res.json({
+				res.status(200).json({
 					success: true,
 					message: 'Password updated successfully.',
 					data: new_pword
@@ -129,8 +140,8 @@ PwordRouter.route('/:id')
 		});
 	})
 
-	.delete(Verify.verifyOrdinaryUser, function(req, res, next) {
-		Pwords.findByIdAndRemove(req.params.id, function(err, status) {
+	.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
+		Pwords.findByIdAndRemove(req.params.id, function (err, status) {
 			if (err) return next(err);
 			res.json({
 				success: true,
