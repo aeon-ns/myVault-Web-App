@@ -1,6 +1,6 @@
 require('dotenv').config();
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
-
+const colors = require('colors/safe');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -35,7 +35,7 @@ const app = express();
 // });
 
 mongoose.Promise = Promise;
-mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, { 
+mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
   useMongoClient: true,
   auth: {
     authSource: process.env.DB_AUTH_SOURCE,
@@ -45,9 +45,8 @@ mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${proc
 });
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log("Connected to MongoDb server"));
-
+db.on('error', console.error.bind(console, '\nconnection error:'));
+db.once('open', () => console.log(colors.green("\nConnected to mongoDb server")));
 // view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
 
