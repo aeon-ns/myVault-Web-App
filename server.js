@@ -34,19 +34,24 @@ const app = express();
 //   //307 --> Temporary Redirect HTTP Code
 // });
 
+// DB Connection
 mongoose.Promise = Promise;
-mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`, {
+const MONGO_URI = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+const MONGO_OPTIONS = {
   useMongoClient: true,
   auth: {
-    authSource: process.env.DB_AUTH_SOURCE,
     user: process.env.DB_USER,
     password: process.env.DB_PWD
   }
-});
-
+};
+if (process.env.DB_AUTH_SOURCE) {
+  MONGO_OPTIONS.auth.authSource = process.env.DB_AUTH_SOURCE;
+}
+mongoose.connect(MONGO_URI, MONGO_OPTIONS);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '\nconnection error:'));
-db.once('open', () => console.log(colors.green("\nConnected to mongoDb server")));
+db.once('open', () => console.log(colors.green("\nConnected to mongoDb server\n")));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'public/views'));
 
