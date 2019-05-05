@@ -24,10 +24,6 @@ var Pwords = new Schema({
         type: Boolean,
         default: true
     },
-    hasCustom: {
-        type: Boolean,
-        default: false
-    },
     customFields: [customSchema],
     forUser: {
         type: Schema.Types.ObjectId,

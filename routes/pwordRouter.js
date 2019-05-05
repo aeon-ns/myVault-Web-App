@@ -11,23 +11,19 @@ function _encrypt(string) {
 		.toString();
 }
 function _decrypt(hashValue) {
-	return CryptoJS.AES.decrypt(
-		hashValue,
-		config.SECRET_KEY
-	).toString(
-		CryptoJS.enc.Utf8
-	);
+	return CryptoJS.AES.decrypt(hashValue, config.SECRET_KEY)
+		.toString(CryptoJS.enc.Utf8);
 }
 function _encryptPword(pword) {
 	pword.password = _encrypt(pword.password);
-	if (pword.hasCustom) {
+	if (pword.customFields && pword.customFields.length) {
 		pword.customFields.forEach(customField => customField.value = _encrypt(customField.value));
 	}
 	return pword;
 }
 function _decryptPword(pword) {
 	pword.password = _decrypt(pword.password);
-	if (pword.hasCustom) {
+	if (pword.customFields && pword.customFields.length) {
 		pword.customFields.forEach(customField => customField.value = _decrypt(customField.value));
 	}
 	return pword;
@@ -69,7 +65,7 @@ PwordRouter.route('/')
 			return res.status(200).json({
 				success: true,
 				message: 'Password saved successfully.',
-				data: pword
+				data: _decryptPword(pword)
 			});
 		}
 		catch (err) {
@@ -77,78 +73,68 @@ PwordRouter.route('/')
 		}
 	})
 
-	.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
-		Pwords.remove({ forUser: req.decoded._id }, function (err, status) {
-			if (err) return next(err);
-			res.json({
+	.delete(Verify.verifyOrdinaryUser, async function (req, res, next) {
+		try {
+			await Pwords.remove({ forUser: req.decoded._id });
+			res.status(200).json({
 				success: true,
-				message: 'Passwords removed successfully.',
-				data: status
+				message: 'Passwords removed successfully.'
 			});
-		});
+		}
+		catch (err) {
+			return next(err);
+		}
 	});
 
 PwordRouter.route('/:id')
 
-	.put(Verify.verifyOrdinaryUser, function (req, res, next) {
-		if (!req.params.id) {
-			return res.status(400).json({
-				success: false,
-				message: 'Bad Request. Id is required.'
+	.put(Verify.verifyOrdinaryUser, async function (req, res, next) {
+		try {
+			if (!req.params.id) {
+				return res.status(400).json({
+					success: false,
+					message: 'Bad Request. Id is required.'
+				});
+			}
+			if (!req.body) {
+				return res.status(400).json({
+					success: false,
+					message: 'Bad Request. Body is required.'
+				});
+			}
+			await _encryptPword(req.body);
+			let pword = await Pwords.findOneAndUpdate({
+				forUser: req.decoded._id,
+				_id: req.params.id
+			}, req.body, { new: true });
+			res.status(200).json({
+				success: true,
+				message: 'Password updated successfully.',
+				data: _decryptPword(pword)
 			});
 		}
-		Pwords.findById(req.params.id, function (err, pword) {
-			if (err) return next(err);
-			if (pword.forUser != req.decoded._id) {
-				err.message = 'Unauthorized Access!';
-				err.status = 401;
-				return next(err);
-			}
-			if (req.body.title) {
-				pword.title = req.body.title;
-				pword.username = req.body.username;
-				pword.account = req.body.account;
-				pword.hasCustom = req.body.hasCustom;
-				//Encrypt
-				var hash = CryptoJS.AES.encrypt(
-					req.body.password,
-					config.SECRET_KEY
-				);
-				req.body.password = hash.toString();
-
-				if (req.body.hasCustom) {
-					for (var j = 0; j < req.body.customFields.length; j++) {
-						hash = CryptoJS.AES.encrypt(
-							req.body.customFields[j].value,
-							config.SECRET_KEY
-						);
-						req.body.customFields[j].value = hash.toString();
-					}
-				}
-				pword.password = req.body.password;
-				pword.customFields = req.body.customFields;
-			}
-			pword.pinned = req.body.pinned;
-			pword.save(function (err, new_pword) {
-				if (err) return next(err);
-				res.status(200).json({
-					success: true,
-					message: 'Password updated successfully.',
-					data: new_pword
-				});
-			});
-		});
+		catch (err) {
+			return next(err);
+		}
 	})
 
-	.delete(Verify.verifyOrdinaryUser, function (req, res, next) {
-		Pwords.findByIdAndRemove(req.params.id, function (err, status) {
-			if (err) return next(err);
-			res.json({
+	.delete(Verify.verifyOrdinaryUser, async function (req, res, next) {
+		try {
+			if (!req.params || req.params && !req.params.id) {
+				return res.status(400).json({
+					success: false,
+					message: 'Bad Request. Id is required'
+				});
+			}
+			await Pwords.findByIdAndRemove(req.params.id);
+			res.status(200).json({
 				success: true,
-				message: 'Password removed successfully.',
-				data: status
+				message: 'Password removed successfully.'
 			});
-		});
+		}
+		catch (err) {
+			return next(err);
+		}
 	});
 
 module.exports = PwordRouter;
